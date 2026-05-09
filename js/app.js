@@ -1,28 +1,25 @@
 // Main application entry point
 // Integrates location, services, offline handling, and UI
 
-import {
-  isOffline,
-  getConnectionStatus,
-  listenConnectionChanges,
-  checkInternetHealth
-} from "./offline/offline.js";
+import { fetchWithFallback }
+from "./offline/fetchWithFallback.js";
 
+async function mockFetchServices() {
 
+  return [
+    {
+      name: "Apollo Hospital"
+    }
+  ];
+}
 
-console.log("Offline:", isOffline());
-
-console.log("Status:", getConnectionStatus());
-
-
-
-listenConnectionChanges();
-
-
-
-checkInternetHealth()
+fetchWithFallback(mockFetchServices)
   .then((result) => {
 
-    console.log("Internet Health:", result);
+    console.log("Fetch Result:", result);
 
   });
+
+window.fetchWithFallback = fetchWithFallback;
+
+window.mockFetchServices = mockFetchServices;

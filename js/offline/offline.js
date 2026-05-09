@@ -36,18 +36,16 @@ export function listenConnectionChanges() {
 }
 
 // Verifies real internet/API availability
+// Verifies real internet availability
 export async function checkInternetHealth() {
 
   try {
 
-    const response = await fetch(
-      "https://overpass-api.de/api/interpreter",
-      {
-        method: "HEAD"
-      }
-    );
+    await fetch("https://www.google.com", {
+      mode: "no-cors"
+    });
 
-    return response.ok;
+    return true;
 
   } catch (error) {
 
