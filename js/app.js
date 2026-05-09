@@ -2,30 +2,27 @@
 // Integrates location, services, offline handling, and UI
 
 import {
-  saveServicesToCache,
-  getValidCachedServices
-} from "./offline/cacheService.js";
-
-
-// Test data
-const testServices = [
-  {
-    name: "Apollo Hospital"
-  }
-];
+  isOffline,
+  getConnectionStatus,
+  listenConnectionChanges,
+  checkInternetHealth
+} from "./offline/offline.js";
 
 
 
-// STEP 1:
-// Uncomment this ONLY ONCE to create cache
+console.log("Offline:", isOffline());
 
-//saveServicesToCache(testServices);
-
+console.log("Status:", getConnectionStatus());
 
 
-// STEP 2:
-// Keep this active
 
-const cached = getValidCachedServices();
+listenConnectionChanges();
 
-console.log("Cached Data:", cached);
+
+
+checkInternetHealth()
+  .then((result) => {
+
+    console.log("Internet Health:", result);
+
+  });
