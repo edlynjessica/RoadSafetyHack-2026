@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Emergency</title>
 
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="background-glow"></div>
+
+  <div class="container fade-in">
+
+    <h1>🚗 Vehicle Emergency</h1>
+
+    <p class="subtitle">
+      Select the vehicle issue
+    </p>
+
+    <div class="options-container">
+
+      <button class="option-btn"
+        onclick="selectSituation('vehicle_breakdown')">
+        Vehicle Breakdown
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('flat_tyre')">
+        Flat Tyre
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('out_of_fuel')">
+        Out of Fuel
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('towing_required')">
+        Towing Required
+      </button>
+
+    </div>
+
+    <button class="back-btn" onclick="goHome()">
+      ← Back to Home
+    </button>
+
+  </div>
+
+  <script src="js/navigation.js"></script>
+
+</body>
+</html>
