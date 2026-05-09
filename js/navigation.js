@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 function goToMedical() {
     window.location.href = "medical.html";
 }
@@ -23,4 +20,3 @@ function selectSituation(situation) {
     // Navigate to services page
     window.location.href = "services.html";
 }
->>>>>>> diya-ui
