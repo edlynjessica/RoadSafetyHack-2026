@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Medical Emergency</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="background-glow"></div>
+
+  <div class="container fade-in">
+
+    <h1>🚑 Medical Emergency</h1>
+
+    <p class="subtitle">
+      Select the situation for immediate assistance
+    </p>
+
+    <div class="options-container">
+
+      <button class="option-btn"
+        onclick="selectSituation('minor_injury')">
+        Minor Injury
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('severe_accident')">
+        Severe Accident
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('unconscious_person')">
+        Unconscious Person
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('ambulance_required')">
+        Ambulance Required
+      </button>
+
+      <button class="option-btn"
+        onclick="selectSituation('general_emergency')">
+        General Emergency
+      </button>
+
+    </div>
+
+    <button class="back-btn" onclick="goHome()">
+      ← Back to Home
+    </button>
+
+  </div>
+
+  <script src="js/navigation.js"></script>
+
+</body>
+</html>
