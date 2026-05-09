@@ -2,6 +2,12 @@
 // Detects online/offline changes
 // Provides network status utilities
 
+import {
+  createOfflineBanner,
+  removeOfflineBanner,
+  showOnlineRestoredMessage
+} from "./offlineBanner.js";
+
 // Returns true if browser is offline
 export function isOffline() {
 
@@ -19,17 +25,23 @@ export function getConnectionStatus() {
 // Listen for internet connection changes
 export function listenConnectionChanges() {
 
-  window.addEventListener("online", () => {
+  window.addEventListener("offline", () => {
 
-    console.log("Internet connection restored");
+    console.log("Internet connection lost");
+
+    createOfflineBanner();
 
   });
 
 
 
-  window.addEventListener("offline", () => {
+  window.addEventListener("online", () => {
 
-    console.log("Internet connection lost");
+    console.log("Internet connection restored");
+
+    removeOfflineBanner();
+
+    showOnlineRestoredMessage();
 
   });
 
