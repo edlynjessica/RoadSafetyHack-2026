@@ -14,46 +14,75 @@ import {
 export async function fetchWithFallback(fetchFunction) {
     if (isOffline()) {
 
-        console.log("Browser offline — using cache");
+        console.log("[Road SOS Offline] Browser offline");
 
         const cachedData = getValidCachedServices();
 
+        if (cachedData) {
+
+            console.log("[Road SOS Offline] Using cached fallback data");
+
+            return {
+                source: "cache",
+                services: cachedData,
+                timestamp: Date.now()
+            };
+        }
+
+        console.log("[Road SOS Offline] No cached data available");
+
         return {
-            source: "cache",
-            services: cachedData
+            source: "error",
+            services: [],
+            timestamp: Date.now()
         };
     }
 
-const internetHealthy = await checkInternetHealth();
+    const internetHealthy = await checkInternetHealth();
 
     if (!internetHealthy) {
 
-        console.log("Internet/API unreachable — using cache");
+        console.log("[Road SOS Offline] Internet/API unreachable");
 
         const cachedData = getValidCachedServices();
 
+        if (cachedData) {
+
+            console.log("[Road SOS Offline] Using cached fallback data");
+
+            return {
+                source: "cache",
+                services: cachedData,
+                timestamp: Date.now()
+            };
+        }
+
+        console.log("[Road SOS Offline] No cached data available");
+
         return {
-            source: "cache",
-            services: cachedData
+            source: "error",
+            services: [],
+            timestamp: Date.now()
         };
     }
     try {
 
-    const liveServices = await fetchFunction();
+        const liveServices = await fetchFunction();
 
-    if (!liveServices || liveServices.length === 0) {
+        if (!Array.isArray(liveServices) || liveServices.length === 0) {
 
-        throw new Error("Empty service response");
-    }
+            throw new Error("Empty service response");
+        }
 
-    saveServicesToCache(liveServices);
+        saveServicesToCache(liveServices);
 
-    console.log("Live data fetched successfully");
+        console.log("[Road SOS Online] Live data fetched successfully");
 
-    return {
-        source: "live",
-        services: liveServices
-    };
+        return {
+            source: "live",
+            services: liveServices,
+            timestamp: Date.now()
+        };
 
     }catch (error) {
 
@@ -63,11 +92,12 @@ const internetHealthy = await checkInternetHealth();
 
         if (cachedData) {
 
-            console.log("Using cached fallback data");
+            console.log("[Road SOS Offline] Using cached fallback data");
 
             return {
-            source: "cache",
-            services: cachedData
+                source: "cache",
+                services: cachedData || [],
+                timestamp: Date.now()
             };
         }
 

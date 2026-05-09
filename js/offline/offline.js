@@ -2,6 +2,9 @@
 // Detects online/offline changes
 // Provides network status utilities
 
+import { updateDataSourceUI }
+from "../ui/statusUI.js";
+
 import {
   createOfflineBanner,
   removeOfflineBanner,
@@ -27,7 +30,7 @@ export function listenConnectionChanges() {
 
   window.addEventListener("offline", () => {
 
-    console.log("Internet connection lost");
+    console.log("[Road SOS Offline] Internet connection lost");
 
     createOfflineBanner();
 
@@ -37,7 +40,7 @@ export function listenConnectionChanges() {
 
   window.addEventListener("online", () => {
 
-    console.log("Internet connection restored");
+    console.log("[Road SOS Online] Internet connection restored");
 
     removeOfflineBanner();
 

@@ -39,6 +39,7 @@ async function mockFetchServices() {
       distance: "2.1 km"
     }
   ];
+  //throw new Error("API failure");
 }
 
 
@@ -111,11 +112,21 @@ checkInternetHealth()
 fetchWithFallback(mockFetchServices)
   .then((result) => {
 
-    console.log("Fetch Result:", result);
+    console.log(result);
 
     updateDataSourceUI(result.source);
 
   });
+
+async function testFetch() {
+
+  const result =
+    await fetchWithFallback(mockFetchServices);
+
+  console.log(result);
+
+  updateDataSourceUI(result.source);
+}
 
 
 
@@ -129,4 +140,6 @@ window.mockFetchServices = mockFetchServices;
 
 window.saveServicesToCache = saveServicesToCache;
 
-window.getValidCachedServices = getValidCachedServices; 
+window.getValidCachedServices = getValidCachedServices;
+
+window.testFetch = testFetch;
