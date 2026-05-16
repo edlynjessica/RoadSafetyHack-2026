@@ -1,24 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
 
-  <body>
-    <script src="js/logic.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Road SOS Dashboard</title>
 
-    <script>
-      const selectedSituation = localStorage.getItem("selectedSituation");
+  <link rel="stylesheet" href="css/style.css">
 
-      console.log(selectedSituation);
+  <!-- Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
-      if (selectedSituation) {
-        selectSituation(selectedSituation);
-      } else {
-        console.log("No situation selected");
-      }
-    </script>
-  </body>
+<body>
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="logo">🚨 ROAD SOS</div>
+
+      <ul>
+        <li class="active">
+          <i class="fa-solid fa-table-columns"></i>
+          Dashboard
+        </li>
+        <li>
+          <i class="fa-solid fa-location-dot"></i>
+          Nearby Services
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+      <h1>LIVE DASHBOARD PREVIEW</h1>
+
+      <div class="services-panel">
+        <h2>Nearby Services</h2>
+
+        <!-- THIS IS WHERE DATA WILL COME -->
+        <div id="servicesContainer"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- LOGIC -->
+  <script src="js/logic.js"></script>
+
+  <script>
+    const selectedSituation = localStorage.getItem("selectedSituation");
+
+    if (selectedSituation) {
+      selectSituation(selectedSituation);
+    } else {
+      console.log("No situation selected");
+    }
+  </script>
+
+  <!-- UI SCRIPT -->
+  <script src="js/servicesUI.js"></script>
+
+</body>
 </html>
