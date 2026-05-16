@@ -1,115 +1,81 @@
 const servicesContainer = document.getElementById("servicesContainer");
 
-const services = [
+async function loadServices() {
 
-  {
-    icon:"H",
-    iconColor:"red",
-    name:"Apollo Trauma Centre",
-    type:"Hospital",
-    distance:"1.2 km",
-    phone:"9876543210",
-    lat:13.0827,
-    lng:80.2707
-  },
+  servicesContainer.innerHTML = "Loading...";
 
-  {
-    icon:"H",
-    iconColor:"blue",
-    name:"City Care Hospital",
-    type:"Hospital",
-    distance:"2.4 km",
-    phone:"9999999999",
-    lat:13.05,
-    lng:80.22
-  },
+  const situation =
+    localStorage.getItem("selectedSituation") || "general";
 
-  {
-    icon:"🚑",
-    iconColor:"red",
-    name:"LifeLine Ambulance",
-    type:"Ambulance",
-    distance:"1 km",
-    phone:"8888888888",
-    lat:13.04,
-    lng:80.25
-  },
+  try {
+    const services =
+      await window.findNearbyHospitals(situation);
 
-  {
-    icon:"🛡",
-    iconColor:"yellow",
-    name:"Highway Police Station",
-    type:"Police",
-    distance:"1.8 km",
-    phone:"7777777777",
-    lat:13.08,
-    lng:80.28
-  },
+    servicesContainer.innerHTML = "";
 
-  {
-    icon:"🚚",
-    iconColor:"orange",
-    name:"RoadResQ Towing",
-    type:"Towing",
-    distance:"2.2 km",
-    phone:"6666666666",
-    lat:13.06,
-    lng:80.26
+    if (!services || services.length === 0) {
+      servicesContainer.innerHTML = "No services found";
+      return;
+    }
+
+    updateStats(services);
+
+    services.forEach(service => {
+
+      const card = document.createElement("div");
+      card.classList.add("service-card");
+
+      const icon =
+        service.type.includes("ambulance") ? "🚑" :
+        service.type.includes("police") ? "🛡" :
+        service.type.includes("towing") ? "🚚" :
+        service.type.includes("fuel") ? "⛽" :
+        service.type.includes("repair") ? "🔧" :
+        "🏥";
+
+      card.innerHTML = `
+        <div class="left">
+          <div class="icon red">${icon}</div>
+          <div class="service-info">
+            <h3>${service.name}</h3>
+            <p>${service.type} • ${service.distance}</p>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <a href="${service.phone !== 'N/A' ? `tel:${service.phone}` : '#'}" class="call-btn">
+            📞 Call
+          </a>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=${service.lat},${service.lon}"
+            target="_blank"
+            class="nav-btn"
+          >
+            📍 Go
+          </a>
+        </div>
+      `;
+
+      servicesContainer.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    servicesContainer.innerHTML = "Error loading services";
   }
-
-];
-
-
-function displayServices(data){
-
-  data.forEach(service => {
-
-    const card = document.createElement("div");
-
-    card.classList.add("service-card");
-
-    card.innerHTML = `
-
-      <div class="left">
-
-        <div class="icon ${service.iconColor}">
-          ${service.icon}
-        </div>
-
-        <div class="service-info">
-
-          <h3>${service.name}</h3>
-
-          <p>
-            ${service.type} • ${service.distance}
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="buttons">
-
-        <a href="tel:${service.phone}" class="call-btn">
-          📞 Call
-        </a>
-
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=${service.lat},${service.lng}"
-          target="_blank"
-          class="nav-btn"
-        >
-          📍 Go
-        </a>
-
-      </div>
-
-    `;
-
-    servicesContainer.appendChild(card);
-
-  });
-
 }
 
-displayServices(services);
+function updateStats(services) {
+  document.getElementById("incidentsCount").textContent = services.length;
+
+  document.getElementById("ambulanceCount").textContent =
+    services.filter(s => s.type === "Ambulance").length;
+
+  document.getElementById("traumaCount").textContent =
+    services.filter(s => s.type === "Hospital").length;
+
+  document.getElementById("towingCount").textContent =
+    services.filter(s => s.type === "Towing").length;
+}
+
+loadServices();

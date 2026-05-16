@@ -1,0 +1,210 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#081120,#13233d);
+  color:white;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-x:hidden;
+  position:relative;
+  padding:20px;
+}
+
+/* Background Glow */
+
+.background-glow{
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:rgba(239,68,68,0.15);
+  border-radius:50%;
+  filter:blur(120px);
+  top:-150px;
+  left:-150px;
+  z-index:0;
+}
+
+/* Container */
+
+.container{
+  width:100%;
+  max-width:1100px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+
+/* Logo */
+
+.logo-title{
+  font-size:4rem;
+  font-weight:700;
+  margin-bottom:15px;
+  animation:pulse 2s infinite;
+}
+
+.tagline{
+  color:#cbd5e1;
+  font-size:1.2rem;
+  margin-bottom:60px;
+}
+
+/* Cards */
+
+.card-container{
+  display:flex;
+  justify-content:center;
+  gap:35px;
+  flex-wrap:wrap;
+}
+
+.card{
+  background:rgba(30,41,59,0.85);
+  backdrop-filter:blur(10px);
+  border-radius:24px;
+  width:350px;
+  padding:40px 30px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.35);
+  transition:0.35s ease;
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.02);
+  box-shadow:0 20px 40px rgba(239,68,68,0.25);
+}
+
+.card h2{
+  font-size:2rem;
+  margin-bottom:30px;
+}
+
+/* Description Below Button */
+
+.card-description{
+  margin-top:35px;
+}
+
+.card-description p{
+  color:#cbd5e1;
+  line-height:1.8;
+  font-size:1.02rem;
+}
+
+/* Buttons */
+
+button{
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:16px 28px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:600;
+  transition:0.3s ease;
+}
+
+button:hover{
+  transform:scale(1.06);
+  background:#dc2626;
+}
+
+/* Emergency Buttons */
+
+.options-container{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  max-width:450px;
+  margin:40px auto;
+}
+
+.option-btn{
+  width:100%;
+  padding:18px;
+  border-radius:16px;
+  font-size:1rem;
+  background:#1e293b;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.option-btn:hover{
+  background:#ef4444;
+  transform:translateY(-3px);
+}
+
+/* Subtitle */
+
+.subtitle{
+  color:#cbd5e1;
+  margin-top:15px;
+  font-size:1.1rem;
+}
+
+/* Back Button */
+
+.back-btn{
+  margin-top:10px;
+  background:#334155;
+}
+
+.back-btn:hover{
+  background:#475569;
+}
+
+/* Animations */
+
+.fade-in{
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes pulse{
+  0%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.03);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
+
+/* Mobile Responsive */
+
+@media(max-width:768px){
+
+  .logo-title{
+    font-size:2.8rem;
+  }
+
+  .card{
+    width:100%;
+  }
+
+  .card h2{
+    font-size:1.6rem;
+  }
+
+}

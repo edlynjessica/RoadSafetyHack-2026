@@ -1,164 +1,108 @@
 async function getLocation() {
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const userLocation = {
-        lat: position.coords.latitude,
-        lon: position.coords.longitude,
-      };
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLocation = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        };
 
-      // Save location
-      localStorage.setItem("userLocation", JSON.stringify(userLocation));
-
-      resolve(userLocation);
-    }, reject);
+        localStorage.setItem("userLocation", JSON.stringify(userLocation));
+        resolve(userLocation);
+      },
+      (error) => {
+        alert("Location permission required 🚨");
+        reject(error);
+      }
+    );
   });
 }
 
+// ✅ CATEGORY CONFIG (GOOD ONE)
 const emergencyConfig = {
-  minor: {
-    category: "healthcare.hospital",
-    blocked: ["maternity"],
-  },
+  minor_injury: { category: "healthcare.hospital,healthcare.clinic" },
+  severe_accident: { category: "healthcare.hospital,emergency.ambulance" },
+  unconscious_person: { category: "healthcare.hospital,emergency.ambulance" },
+  ambulance_required: { category: "emergency.ambulance" },
+  maternity: { category: "healthcare.hospital" },
+  general_emergency: { category: "healthcare.hospital,emergency.ambulance" },
 
-  severe: {
-    category: "healthcare.hospital",
-    blocked: ["maternity", "clinic"],
-  },
+  vehicle_breakdown: { category: "service.vehicle.repair" },
+  flat_tyre: { category: "service.vehicle.repair" },
+  out_of_fuel: { category: "service.vehicle.fuel" },
+  towing_required: { category: "service.vehicle.towing" },
 
-  unconscious: {
-    category: "healthcare.hospital",
-    blocked: ["maternity"],
-  },
-
-  ambulance: {
-    category: "healthcare.hospital",
-    blocked: [],
-  },
-
-  maternity: {
-    category: "healthcare.hospital",
-    required: ["maternity"],
-  },
-
-  general: {
-    category: "healthcare.hospital",
-    blocked: [],
-  },
+  general: { category: "healthcare.hospital" }
 };
 
-function filterPlaces(features, type) {
-  const config = emergencyConfig[type];
+// 🔥 FIX: CLASSIFY PROPERLY
+function classifyPlace(category) {
+  if (!category) return "Hospital";
 
-  return features.filter((place) => {
-    const name = place.properties.name?.toLowerCase() || "";
+  if (category.includes("ambulance")) return "Ambulance";
+  if (category.includes("police")) return "Police";
+  if (category.includes("towing")) return "Towing";
+  if (category.includes("fuel")) return "Fuel";
+  if (category.includes("repair")) return "Repair";
 
-    // Ignore unnamed places
-    if (!name || name.length < 3) {
-      return false;
-    }
-
-    // Required keywords
-    if (config.required) {
-      return config.required.some((word) => name.includes(word));
-    }
-
-    // Block blocked keywords
-    if (config.blocked) {
-      return !config.blocked.some((word) => name.includes(word));
-    }
-
-    return true;
-  });
+  return "Hospital";
 }
 
+// 🔥 MAIN FUNCTION (FIXED)
 async function findNearbyHospitals(type = "general") {
   try {
-    // Get fresh location
     const userLocation = await getLocation();
 
-    const apiKey = "c3d016bb76cb408184b34a4be6f52a39";
+    const apiKey = "ddb8976a6b3e41a8a020ea37af34ff9e";
 
-    const config = emergencyConfig[type];
+    const config = emergencyConfig[type] || emergencyConfig["general"];
 
-    const url =
-      `https://api.geoapify.com/v2/places?` +
-      `categories=${config.category}&` +
-      `filter=circle:${userLocation.lon},${userLocation.lat},5000&` +
-      `bias=proximity:${userLocation.lon},${userLocation.lat}&` +
-      `limit=10&` +
-      `apiKey=${apiKey}`;
+    async function fetchPlaces(category) {
+      const url =
+        `https://api.geoapify.com/v2/places?` +
+        `categories=${category}&` +
+        `filter=circle:${userLocation.lon},${userLocation.lat},5000&` +
+        `bias=proximity:${userLocation.lon},${userLocation.lat}&` +
+        `limit=10&` +
+        `apiKey=${apiKey}`;
 
-    const response = await fetch(url);
+      const response = await fetch(url);
+      const data = await response.json();
 
-    const data = await response.json();
-
-    if (!data.features) {
-      console.error("Invalid API response:", data);
-      return;
+      return data.features || [];
     }
 
-    const hospitals = filterPlaces(data.features, type);
-    // Sort nearest first
-    hospitals.sort((a, b) => a.properties.distance - b.properties.distance);
+    // 🔥 STEP 1: try actual category
+    let places = await fetchPlaces(config.category);
 
-    // No results
-    if (hospitals.length === 0) {
-      console.log("No hospitals found nearby");
-      return;
+    // 🔥 STEP 2: fallback to hospitals
+    if (places.length === 0) {
+      console.warn("Fallback → hospitals");
+      places = await fetchPlaces("healthcare.hospital");
     }
 
-    // Nearest result
-    const nearest = hospitals[0];
+    // 🔥 STEP 3: still empty → return empty
+    if (places.length === 0) return [];
 
-    console.log("Nearest Hospital:");
-    console.log(
-      nearest.properties.name,
-      "-",
-      nearest.properties.distance + " meters",
-    );
+    return places.map(place => {
 
-    console.log("Nearby Hospitals:");
+      const category = place.properties.categories?.[0] || "";
+      const type = classifyPlace(category);
 
-    hospitals.forEach((place, index) => {
-      console.log(
-        `${index + 1}.`,
-        place.properties.name,
-        "-",
-        place.properties.distance + " meters",
-      );
+      return {
+        name: place.properties.name || "Unknown",
+        distance: (place.properties.distance / 1000).toFixed(2) + " km",
+        lat: place.properties.lat,
+        lon: place.properties.lon,
+        phone: place.properties.phone || "N/A",
+        type
+      };
     });
+
   } catch (error) {
-    console.error("Error fetching hospitals:", error);
+    console.error(error);
+    return [];
   }
 }
 
-function selectSituation(type) {
-  switch (type) {
-    case "minor_injury":
-      findNearbyHospitals("minor");
-      break;
-
-    case "severe_accident":
-      findNearbyHospitals("severe");
-      break;
-
-    case "unconscious_person":
-      findNearbyHospitals("unconscious");
-      break;
-
-    case "ambulance_required":
-      findNearbyHospitals("ambulance");
-      break;
-
-    case "maternity":
-      findNearbyHospitals("maternity");
-      break;
-
-    case "general_emergency":
-      findNearbyHospitals("general");
-      break;
-
-    default:
-      console.log("Unknown situation");
-  }
-}
+window.findNearbyHospitals = findNearbyHospitals;

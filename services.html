@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Road SOS Dashboard</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/dashboard.css">
 
   <!-- Icons -->
   <link rel="stylesheet"
@@ -19,18 +20,51 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="logo">🚨 ROAD SOS</div>
+
+      <div class="logo">
+        🚨 ROAD SOS
+      </div>
 
       <ul>
-        <li class="active">
+
+        <!-- DASHBOARD -->
+        <li onclick="goHome()">
           <i class="fa-solid fa-table-columns"></i>
           Dashboard
         </li>
-        <li>
+
+        <!-- SERVICES -->
+        <li onclick="window.location.href='services.html'" class="active">
           <i class="fa-solid fa-location-dot"></i>
           Nearby Services
         </li>
+
+        <!-- INCIDENTS -->
+        <li onclick="alert('Coming soon')">
+          <i class="fa-regular fa-file-lines"></i>
+          Active Incidents
+        </li>
+
+        <!-- ALERTS -->
+        <li onclick="alert('Coming soon')">
+          <i class="fa-regular fa-bell"></i>
+          My Alerts
+        </li>
+
+        <!-- CONTACTS -->
+        <li onclick="alert('Coming soon')">
+          <i class="fa-solid fa-phone"></i>
+          Contacts
+        </li>
+
+        <!-- SETTINGS -->
+        <li onclick="alert('Coming soon')">
+          <i class="fa-solid fa-gear"></i>
+          Settings
+        </li>
+
       </ul>
+
     </div>
 
     <!-- MAIN CONTENT -->
@@ -38,32 +72,50 @@
 
       <h1>LIVE DASHBOARD PREVIEW</h1>
 
+      <!-- TOP CARDS -->
+      <div class="stats-container">
+
+        <div class="stat-card">
+          <h3>Active Incidents</h3>
+          <p id="incidentsCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Ambulances Nearby</h3>
+          <p id="ambulanceCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Trauma Centres</h3>
+          <p id="traumaCount">0</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Towing Services</h3>
+          <p id="towingCount">0</p>
+        </div>
+
+      </div>
+
+      <!-- SERVICES -->
       <div class="services-panel">
+
         <h2>Nearby Services</h2>
 
-        <!-- THIS IS WHERE DATA WILL COME -->
-        <div id="servicesContainer"></div>
+        <div id="servicesContainer">
+          Loading...
+        </div>
+
       </div>
 
     </div>
 
   </div>
 
-  <!-- LOGIC -->
+  <!-- SCRIPTS (ORDER IMPORTANT) -->
+  <script src="js/navigation.js"></script>
   <script src="js/logic.js"></script>
-
-  <script>
-    const selectedSituation = localStorage.getItem("selectedSituation");
-
-    if (selectedSituation) {
-      selectSituation(selectedSituation);
-    } else {
-      console.log("No situation selected");
-    }
-  </script>
-
-  <!-- UI SCRIPT -->
-  <script src="js/servicesUI.js"></script>
+  <script src="js/services.js"></script>
 
 </body>
 </html>
