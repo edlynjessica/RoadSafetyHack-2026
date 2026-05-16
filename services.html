@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Road SOS Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+      <div class="logo">
+        🚨 ROAD SOS
+      </div>
+
+      <ul>
+
+        <li class="active">
+          <i class="fa-solid fa-table-columns"></i>
+          Dashboard
+        </li>
+
+        <li>
+          <i class="fa-solid fa-location-dot"></i>
+          Nearby Services
+        </li>
+
+        <li>
+          <i class="fa-regular fa-file-lines"></i>
+          Active Incidents
+        </li>
+
+        <li>
+          <i class="fa-regular fa-bell"></i>
+          My Alerts
+        </li>
+
+        <li>
+          <i class="fa-solid fa-phone"></i>
+          Contacts
+        </li>
+
+        <li>
+          <i class="fa-solid fa-gear"></i>
+          Settings
+        </li>
+
+      </ul>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+      <h1>LIVE DASHBOARD PREVIEW</h1>
+
+
+      <!-- TOP CARDS -->
+
+      <div class="stats-container">
+
+        <div class="stat-card">
+          <h3>Active Incidents</h3>
+          <p>24</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Ambulances Nearby</h3>
+          <p>12</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Trauma Centres</h3>
+          <p>8</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Towing Services</h3>
+          <p>15</p>
+        </div>
+
+      </div>
+
+
+      <!-- SERVICES -->
+
+      <div class="services-panel">
+
+        <h2>Nearby Services</h2>
+
+        <div id="servicesContainer"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="js/servicesUI.js"></script>
+
+</body>
+
+</html>
